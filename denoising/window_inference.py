@@ -2,13 +2,13 @@ import torch
 
 
 def inference_tiling_intersected(
-        img: torch.Tensor, single_inference: callable, tile_size=256, stride_k=2) -> torch.Tensor:
+        img: torch.Tensor, single_inference: callable, tile_size=256, stride_k=1) -> torch.Tensor:
     """
     Process the image with splitting on tiles.
     `singel_inferece` will be applied to each tile. Its expected the input
     image is torch.Tensor [C, H, W] shape of float type.
     """
-    res_mask = torch.zeros(img.size(1), img.size(2), dtype=torch.float32, device=img.device)
+    res_mask = torch.zeros(img.size(0), img.size(1), img.size(2), dtype=torch.float32, device=img.device)
     counter_mask = torch.zeros(img.size(1), img.size(2), dtype=torch.long, device=img.device)
 
     stride = tile_size // stride_k
@@ -31,9 +31,8 @@ def inference_tiling_intersected(
     for y0 in y0_vec:
         for x0 in x0_vec:
             img_crop = img[:, y0:y0 + tile_size, x0:x0 + tile_size]
-            # res = single_inference(img_crop.unsqueeze(0)).squeeze(0)
-            res = tta_inference(img_crop, single_inference)
-            res_mask[y0:y0 + tile_size, x0:x0 + tile_size] += res[0]
+            res = single_inference(img_crop.unsqueeze(0)).squeeze(0)
+            res_mask[y0:y0 + tile_size, x0:x0 + tile_size] += res
             counter_mask[y0:y0 + tile_size, x0:x0 + tile_size] += 1
 
     return res_mask / counter_mask
