@@ -23,7 +23,7 @@ class DANetInference(object):
             self.net.load_state_dict(
                 torch.load(net_weights, map_location='cpu')['D'])
         else:
-            self.net = UNetD(3, wf=32, depth=5).cuda()
+            self.net = UNetD(3, wf=32, depth=5)
             if net_arch == 'danet':
                 self.net.load_state_dict(torch.load(net_weights, map_location='cpu')['D'])
             else:
@@ -65,7 +65,7 @@ if __name__ == '__main__':
 
     image = cv2.cvtColor(
         cv2.imread(
-            '../data/images_dataset/sony_calibrated/DSC01214.JPG',
+            '../data/images_dataset/sony_calibrated/DSC01215.JPG',
             cv2.IMREAD_COLOR
         ),
         cv2.COLOR_BGR2RGB
@@ -73,4 +73,4 @@ if __name__ == '__main__':
     w = '../third_patry/DANet/model_states/DANet.pt'
     model = DANetInference(net_arch='danet', net_weights=w, device='cuda')
     denoise_image = model(image)
-    cv2.imwrite('../data/denoised_14.jpg', denoise_image)
+    cv2.imwrite('../data/denoised_15.jpg', denoise_image)
