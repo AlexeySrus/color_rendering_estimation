@@ -32,7 +32,7 @@ def inference_tiling_intersected(
         for x0 in x0_vec:
             img_crop = img[:, y0:y0 + tile_size, x0:x0 + tile_size]
             res = single_inference(img_crop.unsqueeze(0)).squeeze(0)
-            res_mask[y0:y0 + tile_size, x0:x0 + tile_size] += res
+            res_mask[:, y0:y0 + tile_size, x0:x0 + tile_size] += res
             counter_mask[y0:y0 + tile_size, x0:x0 + tile_size] += 1
 
     return res_mask / counter_mask

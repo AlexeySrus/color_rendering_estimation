@@ -17,7 +17,6 @@ class DANetInference(object):
     net = None
 
     def __init__(self, net_arch: str, net_weights: str, device: str = 'cpu'):
-
         # load the pretrained model
         if net_arch == 't':
             self.net = Uformer(img_size=128)
@@ -51,9 +50,9 @@ class DANetInference(object):
         """
         inputs = torch.from_numpy(
             img_as_float32(image).transpose([2, 0, 1])
-        ).unsqueeze(0).to(self.device)
+        ).to(self.device)
         with torch.no_grad():
-            out = inference_tiling_intersected(inputs, self.inference)
+            out = inference_tiling_intersected(inputs, self.inference, tile_size=128)
 
         im_denoise = (out.cpu().numpy().transpose(
             [1, 2, 0]) * 255).astype(np.uint8)
@@ -71,3 +70,7 @@ if __name__ == '__main__':
         ),
         cv2.COLOR_BGR2RGB
     )
+    w = '../third_patry/DANet/model_states/DANet.pt'
+    model = DANetInference(net_arch='danet', net_weights=w, device='cuda')
+    denoise_image = model(image)
+    cv2.imwrite('../data/denoised_14.jpg', denoise_image)
