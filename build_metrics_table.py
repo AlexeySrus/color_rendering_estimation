@@ -5,7 +5,7 @@ import pandas as pd
 
 from utils.table_tools import read_gt_table, read_colorchecker_table
 from utils.metrics import rmse, calculate_delta_e_between_tables
-b
+
 
 # Remove .DS_Store which used in MACOS file system
 def remove_dsstore(names_list: List[str]) -> List[str]:
