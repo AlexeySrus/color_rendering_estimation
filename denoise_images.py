@@ -27,7 +27,7 @@ def parse_args() -> Namespace:
         help='Denoising approach: ' \
              '\'nlmd\' is Non-local means denoising, ' \
              '\'danet\' is Unet-likely model trained with DANet strategy, ' \
-             '\'danet-pp\' is Unet-likely model trained with DANet++ strategy, ' \
+             '\'danet-pp\' is Unet-likely model trained with DANet+ strategy, ' \
              '\'danet-t\' is Uformer model  trained with DANet strategy'
     ),
     parser.add_argument(
