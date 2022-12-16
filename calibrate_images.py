@@ -25,6 +25,10 @@ def parse_args() -> Namespace:
         '--gt-table', type=str, required=False, default='./gt_colors.csv',
         help='Path to table with ground truth colors'
     )
+    parser.add_argument(
+        '--x-rite', action='store_true',
+        help='Use this option if you use color checker from x-rite'
+    )
     return parser.parse_args()
 
 
@@ -39,7 +43,7 @@ if __name__ == '__main__':
 
     os.makedirs(args.output, exist_ok=True)
 
-    rgbs_gt, _ = read_gt_table(args.gt_table)
+    rgbs_gt, _ = read_gt_table(args.gt_table, args.x_rite)
 
     for fname in tqdm(calibration_tables_basenames):
         image_path = os.path.join(args.input, fname + '.JPG')
