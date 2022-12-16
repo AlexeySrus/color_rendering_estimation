@@ -30,11 +30,12 @@ def read_colorchecker_table(table_path: str) -> Tuple[np.ndarray, np.ndarray]:
     return rgb_values, lab_values
 
 
-def read_gt_table(table_path: str) -> Tuple[np.ndarray, np.ndarray]:
+def read_gt_table(table_path: str, x_rite: bool = False) -> Tuple[np.ndarray, np.ndarray]:
     """
     Read table with ground truth pathes colors
     Args:
        table_path: csv table path with "," separator
+       x_rite: Set True if used color table from x-rite company
 
     Returns:
        Lists of 24 sRGB detected colors and CIE Lab colors
@@ -52,6 +53,13 @@ def read_gt_table(table_path: str) -> Tuple[np.ndarray, np.ndarray]:
 
     rgb_values = np.array(rgb_values, dtype=np.float32)
     lab_values = np.array(lab_values, dtype=np.float32)
+
+    if x_rite:
+        rgb_values = rgb_values.reshape((4, 6, 3))
+        rgb_values[:3] = rgb_values[:3, ::-1]
+        rgb_values[1] = rgb_values[1, ::-1]
+        rgb_values = rgb_values.reshape((24, 3))
+
     return rgb_values, lab_values
 
 
